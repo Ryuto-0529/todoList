@@ -1,32 +1,105 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div id="bg">
+      <div class="todo">
+        <p>Todo List</p>
+        <div class="flex">
+          <input type="text" name="insert" v-model="newTodo">
+          <button class="btn insert" @click="insertTodo">追加</button>
+        </div>
+        <div class="list" v-for="item in todoLists" :key="item.id">
+          <div class="flex">
+            <input type="text" v-model="item.todo" >
+            <div class="container">
+              <button class="btn update" @click="updateTodo(item.id, item.todo)">更新</button>
+              <button class="btn delete" @click="deleteTodo(item.id)">削除</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <router-view/>
   </div>
 </template>
 
+<script>
+import axios from "axios";
+export default {
+  data() {
+    return {
+      newTodo: "",
+      todoLists: [],
+    };
+  },
+  methods: {
+    async getTodo() {
+      const resData = await axios.get("http://127.0.0.1:8000/api/todo");
+      this.todoLists = resData.data.data;
+    },
+    async insertTodo() {
+      const sendData = {
+        todo: this.newTodo,
+      };
+      await axios.post("http://127.0.0.1:8000/api/todo", sendData);
+      await this.getTodo();
+    },
+    async updateTodo(id, todo) {
+      const sendData = {
+        todo: todo,
+      };
+      await axios.put("http://127.0.0.1:8000/api/todo/" + id, sendData);
+      await this.getTodo();
+    },
+    async deleteTodo(id) {
+      await axios.delete("http://127.0.0.1:8000/api/todo/" + id);
+      await this.getTodo();
+    },
+  },
+  created() {
+    this.getTodo();
+  },
+};
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+#bg {
+  background-color: #191970;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
 }
-
-#nav {
-  padding: 30px;
+.todo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 20px;
 }
-
-#nav a {
+.todo p {
   font-weight: bold;
-  color: #2c3e50;
+  font-size: 24px;
 }
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+.flex{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.btn {
+  padding: 10px;
+  background-color: white;
+  border-radius: 10px;
+}
+.insert {
+  color: pink;
+  border: 1px solid pink;
+}
+.update {
+  color: orange;
+  border: 1px solid orange;
+}
+.delete {
+  color: greenyellow;
+  border: 1px solid greenyellow;
 }
 </style>
