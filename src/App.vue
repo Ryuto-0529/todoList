@@ -32,25 +32,25 @@ export default {
   },
   methods: {
     async getTodo() {
-      const resData = await axios.get("http://127.0.0.1:8000/api/todo");
+      const resData = await axios.get("https://secret-earth-62264.herokuapp.com/api/todo");
       this.todoLists = resData.data.data;
     },
     async insertTodo() {
       const sendData = {
         todo: this.newTodo,
       };
-      await axios.post("http://127.0.0.1:8000/api/todo", sendData);
+      await axios.post("https://secret-earth-62264.herokuapp.com/api/todo", sendData);
       await this.getTodo();
     },
     async updateTodo(id, todo) {
       const sendData = {
         todo: todo,
       };
-      await axios.put("http://127.0.0.1:8000/api/todo/" + id, sendData);
+      await axios.put("https://secret-earth-62264.herokuapp.com/api/todo/" + id, sendData);
       await this.getTodo();
     },
     async deleteTodo(id) {
-      await axios.delete("http://127.0.0.1:8000/api/todo/" + id);
+      await axios.delete("https://secret-earth-62264.herokuapp.com/api/todo/" + id);
       await this.getTodo();
     },
   },
