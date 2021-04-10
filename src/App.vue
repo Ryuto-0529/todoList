@@ -4,7 +4,7 @@
       <div class="todo">
         <p>Todo List</p>
         <div class="flex">
-          <input type="text" name="insert" v-model="newTodo">
+          <input id="insert" type="text" name="insert" v-model="newTodo">
           <button class="btn insert" @click="insertTodo">追加</button>
         </div>
         <div class="list" v-for="item in todoLists" :key="item.id">
@@ -41,6 +41,7 @@ export default {
       };
       await axios.post("https://secret-earth-62264.herokuapp.com/api/todo", sendData);
       await this.getTodo();
+      this.newTodo = '';
     },
     async updateTodo(id, todo) {
       const sendData = {
@@ -75,10 +76,21 @@ export default {
   padding: 20px;
   background-color: #fff;
   border-radius: 20px;
+  width: 40%;
 }
 .todo p {
   font-weight: bold;
   font-size: 24px;
+}
+input {
+  padding: 10px;
+  border-radius: 5px;
+}
+#insert {
+  width: 70%;
+}
+button {
+  margin: 2px;
 }
 .flex{
   display: flex;
